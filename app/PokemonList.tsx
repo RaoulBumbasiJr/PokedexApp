@@ -1,3 +1,4 @@
+// app/PokemonList.tsx
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -6,19 +7,14 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../navigationTypes";
-
-type PokemonListProps = NativeStackScreenProps<
-  RootStackParamList,
-  "PokemonList"
->;
+import { useRouter } from "expo-router";
 
 interface Pokemon {
   name: string;
   url: string;
 }
 
+// Fetch Pokémon list
 export const getPokemonList = async (limit = 20, offset = 0) => {
   try {
     const response = await fetch(
@@ -30,9 +26,10 @@ export const getPokemonList = async (limit = 20, offset = 0) => {
   }
 };
 
-export default function PokemonList({ navigation }: PokemonListProps) {
+export default function PokemonList() {
   const [pokemon, setPokemon] = useState<Pokemon[]>([]);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     async function fetchPokemon() {
@@ -55,7 +52,10 @@ export default function PokemonList({ navigation }: PokemonListProps) {
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate("PokemonDetail", { name: item.name })
+              router.push({
+                pathname: "/PokemonDetail",
+                params: { name: item.name },
+              })
             }
           >
             <Text style={{ fontSize: 18, padding: 10 }}>{item.name}</Text>

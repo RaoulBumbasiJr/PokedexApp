@@ -1,4 +1,4 @@
 export type RootStackParamList = {
-  PokemonList: undefined;
+  PokemonList: { name: string };
   PokemonDetail: { name: string };
 };
